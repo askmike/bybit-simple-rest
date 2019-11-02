@@ -119,20 +119,24 @@ class BybitRest {
               message = buffer;
             }
 
-            return reject(new BitmexError(message, res, data));
+            const error = new Error(message);
+            error.res = res;
+            error.data = data;
+
+            return reject(error);
           }
 
           let data;
           try {
             data = JSON.parse(buffer);
           } catch (err) {
-            return reject(new BitmexError(buffer, res));
+            const error = new Error(buffer);
+            error.res = res;
+
+            return reject(error);
           }
 
-          resolve({
-            data,
-            headers: res.headers
-          });
+          resolve(data);
         });
       });
 
