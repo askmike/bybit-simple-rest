@@ -11,15 +11,20 @@ const run = async() => {
     secret
   });
 
-  const resp = await client.request({
-    method: 'GET',
-    path: '/open-api/order/list',
-    data: {
-      symbol: 'BTCUSD'
-    }
-  });
+  try {
+    const resp = await client.request({
+      method: 'GET',
+      path: '/v5/account/wallet-balance',
+      data: {
+        accountType: 'CONTRACT'
+      }
+    });
 
-  console.log(resp);
+    console.log(JSON.stringify(resp, null, 2));
+  } catch(e) {
+    console.log(e.message);
+  }
+
 
 }
 

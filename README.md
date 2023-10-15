@@ -2,7 +2,10 @@
 
     npm install bybit-simple-rest
 
-API wrapper for the [Bybit REST API](https://github.com/bybit-exchange/bybit-official-api-docs/blob/master/en/rest_api_sign.md). Please refer to [their documentation](https://github.com/bybit-exchange/bybit-official-api-docs/blob/master/en/rest_api_sign.md) for all calls explained. Check out `sample.js` for some example calls.
+
+V2.0.0 (2023-10-15) now (only) support bybit api v5
+
+API wrapper for the [Bybit REST API](https://bybit-exchange.github.io/docs/v5/guide). Please refer to [their documentation](https://github.com/bybit-exchange/api-usage-examples/blob/master/V5_demo/api_demo/Encryption_HMAC.js) for all calls explained. Check out `sample.js` for some example calls.
 
 ---
 

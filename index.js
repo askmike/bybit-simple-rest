@@ -11,7 +11,7 @@ class BybitRest {
   constructor(config) {
     this.ua = USER_AGENT;
     this.timeout = 10 * 1000;
-    this.expiration = 60 * 1000;
+    this.expiration = '' + (60 * 1000);
 
     // keep-alive
     this.agent = new https.Agent({
@@ -54,23 +54,22 @@ class BybitRest {
       timeout = this.timeout;
     }
 
-    const start = Date.now();
+    const start = '' + Date.now();
 
-    data.api_key = this.key;
-    data.recv_window = this.expiration;
-    data.timestamp = start;
+    let payload;
+    if(method === 'GET') {
+      payload = querystring.stringify(data);
+    } else {
+      payload = JSON.stringify(data);
+    }
 
-    const message = Object.keys(data)
-      .map(key => `${key}=${data[key]}`)
-      .sort()
-      .join('&');
+
+    const message = start + this.key + expiration + payload;
 
     const signature = crypto
       .createHmac('sha256', this.secret)
       .update(message)
       .digest('hex');
-
-    data.sign = signature;
 
     const options = {
       host: 'api.bybit.com',
@@ -79,16 +78,21 @@ class BybitRest {
       agent: this.agent,
       headers: {
         'User-Agent': this.ua,
-        'content-type' : 'application/json'
+        'Content-Type' : 'application/json; charset=utf-8',
+        'X-BAPI-SIGN-TYPE': '2',
+        'X-BAPI-SIGN': signature,
+        'X-BAPI-API-KEY': this.key,
+        'X-BAPI-TIMESTAMP': start,
+        'X-BAPI-RECV-WINDOW': expiration
       },
       // merely passed through for requestDraft
       timeout
     };
 
     if(method === 'GET') {
-      options.path += '?' + querystring.stringify(data);
+      options.path += '?' + payload;
     } else {
-      options.payload = JSON.stringify(data)
+      options.payload = payload;
     }
 
     return options;
